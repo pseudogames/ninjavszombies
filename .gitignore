@@ -1,0 +1,5 @@
+*.o
+data/*.h
+.depend
+/nvz*
+/NinjaVsZombie.app

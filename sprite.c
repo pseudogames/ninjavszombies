@@ -67,7 +67,7 @@ void sprite_gen_target(Sprite *sprite)
                 sprite_target_rect(sprite, action, frame, dir, &dst);
                 SDL_FillRect(element, NULL, 0x00000000);
                 SDL_BlitSurface( sprite->source, &src, element, NULL );
-                SDL_Surface *zoom = zoomSurface(element, ZOOM, ZOOM, SMOOTHING_OFF);
+                SDL_Surface *zoom = zoomSurface(element, (dir ? 1 : -1) * ZOOM, ZOOM, SMOOTHING_OFF);
                 SDL_SetAlpha(zoom,0,0);
                 SDL_SetColorKey(zoom,0,0);
                 dst.x += dst.w/2 - zoom->w/2;
@@ -94,24 +94,3 @@ void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, in
     sprite->target = NULL;
 	sprite_gen_target(sprite);
 }
-
-void body_render(App *app, Body *body) {
-	SDL_Rect src;
-	sprite_target_rect(
-			body->sprite, 
-			body->action, 
-			(int)body->frame,
-			body->dir,
-			&src);
-
-	SDL_Rect dest = {
-		body->pos.x - body->sprite->target_frame_size.x/2,
-		body->pos.y - body->sprite->target_frame_size.y/2,
-		0, 0
-	};
-
-	body->frame += 0.1;
-
-	SDL_BlitSurface(body->sprite->target, &src, app->screen, &dest);
-}
-

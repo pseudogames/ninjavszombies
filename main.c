@@ -20,7 +20,7 @@ void handleDelay(Uint32 start) {
 
 int main(int argc, char* args[]) {
 	App app;
-
+	srand(time(NULL));
 	memset(&app,0,sizeof(App));
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0 ) return 1;
@@ -36,6 +36,7 @@ int main(int argc, char* args[]) {
 
 	ninja_init(&app);
 	missile_init(&app);
+	zombie_init(&app);
 
 	while(app.state != STATE_EXIT) {
 
@@ -71,9 +72,9 @@ int main(int argc, char* args[]) {
 		ninja_render(&app);
 
 		// enemies
-		//// spawn
-		//// move
-		//// draw
+		zombie_spawn(&app);
+		zombie_move(&app);
+		zombie_render(&app);
 
 		SDL_Flip(app.screen);
 		handleDelay(startTime);

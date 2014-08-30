@@ -38,6 +38,7 @@ typedef struct {
 } Sprite;
 
 typedef struct {
+	int active;
 	Point pos;
 	Sprite *sprite;
 	Action action;
@@ -59,6 +60,8 @@ typedef struct {
 	Body zombie[MAX_ZOMBIES];
 	Body missile[MAX_MISSILES];
 	int pressed[SDLK_LAST];
+	int zombie_spawn_time;
+	float zombie_spawn_delay;
 } App;
 
 #define MAX(a,b) ((a)>(b)?(a):(b))
@@ -68,6 +71,7 @@ void sprite_target_rect(Sprite *sprite, Action action, int frame, Direction dir,
 void sprite_gen_rotation(Sprite *sprite);
 void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, int frames, const void *mem, int len);
 
+void body_move(App *app, Body *body);
 void body_render(App *app, Body *body);
 
 void ninja_init(App *app); // one time setup (e.g., load sprite)
