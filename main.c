@@ -17,7 +17,6 @@ void handleDelay(Uint32 start) {
 	SDL_Delay(delay);
 }
 
-
 int main(int argc, char* args[]) {
 	App app;
 	srand(time(NULL));

@@ -17,6 +17,7 @@ void ninja_init(App *app) {
 void ninja_spawn(App *app) {
 	app->ninja.pos.x = app->screen->w/2;
 	app->ninja.pos.y = map_y(app, app->ninja.pos.x);
+	app->ninja.dir = DIR_RIGHT;
 }
 
 void ninja_move(App *app) {

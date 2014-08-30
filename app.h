@@ -75,11 +75,16 @@ typedef struct {
 	int map_step_x;
 	int map_step_delay;
 	int missile_index;
+	SDL_Surface *blood;
+	SDL_Surface *blood_off;
 } App;
 
 #define MAX(a,b) ((a)>(b)?(a):(b))
 #define MIN(a,b) ((a)<(b)?(a):(b))
 #define CLAMP(x,a,b) ((x)<(a)?(a):(x)>(b)?(b):(x))
+
+#define RGBA_FORMAT 32,0x00ff0000,0x0000ff00,0x000000ff,0xff000000
+
 
 void sprite_source_rect(Sprite *sprite, Action action, int frame, SDL_Rect *rect);
 void sprite_target_rect(Sprite *sprite, Action action, int frame, Direction dir, SDL_Rect *rect);

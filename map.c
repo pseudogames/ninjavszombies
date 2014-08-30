@@ -4,22 +4,50 @@
 void map_init(App *app) {
 	int i;
 	for(i=0; i<MAP_SIZE; i++) {
-		app->heightmap[i] = i;
+		app->heightmap[i] = 0;
 	}
 
 	app->map_step_x = 0;
 	app->map_step_delay = app->screen->w;
+
+    app->blood = SDL_CreateRGBSurface(SDL_HWSURFACE, 
+            app->screen->w,
+            app->screen->h,
+            RGBA_FORMAT);
+
+    SDL_SetAlpha(app->blood,SDL_SRCALPHA,0xff);
+	SDL_FillRect(app->blood, NULL, 0x00000000);
+
+    app->blood_off = SDL_CreateRGBSurface(SDL_HWSURFACE, 
+            app->blood->w,
+            app->blood->h,
+            RGBA_FORMAT);
+
+    SDL_SetAlpha(app->blood_off,0,0xff);
+
+	{ // debug
+		Uint32 color = SDL_MapRGBA(app->blood->format, 0xff,0,0,0xff );
+		SDL_Rect rect = {
+			app->screen->w/2,
+			app->screen->h/3,
+			TILE_SIZE*10,
+			TILE_SIZE*10
+		};
+		SDL_FillRect(app->blood, &rect, color);
+	}
+
+
 }
 
 void map_move(App *app) {
 	int i;
 	
 	if(app->ninja.pos.y - app->map_y > app->screen->h * 0.7  ) {
-		app->map_y +=3;
+		app->map_y += app->screen->h/20;
 	}
 
 	if(app->ninja.pos.y - app->map_y < app->screen->h * 0.4  ) {
-		app->map_y -=3;
+		app->map_y -= app->screen->h/20;
 	}
 
 	while(app->ninja.pos.x - app->map_x > app->screen->w * 0.6) {
@@ -30,6 +58,38 @@ void map_move(App *app) {
 		
 			for(i=0; i<MAP_SIZE-1; i++) {
 				app->heightmap[i] = app->heightmap[i+1];
+			}
+
+			{ // move blood
+				SDL_Rect src = {
+					TILE_SIZE,
+					0,
+					app->blood->w - TILE_SIZE,
+					app->blood->h
+				};
+
+				SDL_Rect dst = {
+					0,
+					0,
+					app->blood->w - TILE_SIZE,
+					app->blood->h
+				};
+
+				SDL_Rect clear = {
+					app->blood->w - TILE_SIZE,
+					0,
+					TILE_SIZE,
+					app->blood->h
+				};
+				SDL_FillRect(app->blood_off, &clear, 0);
+
+				SDL_SetAlpha(app->blood, 0, 0xff);
+				SDL_BlitSurface( app->blood, &src, app->blood_off, &dst );
+				SDL_BlitSurface( app->blood_off, NULL, app->blood, NULL );
+				SDL_SetAlpha(app->blood, SDL_SRCALPHA, 0xff);
+			}
+
+			{ // clear last bit
 			}
 
 			int p0 = app->heightmap[MAP_SIZE-3];
@@ -65,6 +125,8 @@ inline int map_y1(App *app, int x) {
 }
 
 void map_render(App *app) {
+	SDL_BlitSurface( app->blood, NULL, app->screen, NULL );
+
 	int sx;
 	Uint32 color = SDL_MapRGB(app->screen->format, 0x00, 0x00, 0x00 );
 	for(sx=0; sx<app->screen->w; sx+=TILE_SIZE) {
