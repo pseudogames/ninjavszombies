@@ -25,12 +25,16 @@ void zombie_spawn(App *app) {
 		for(i=0; i<MAX_ZOMBIES; i++) {
 			if(app->zombie[i].active) continue;
 			//printf("spawn zombie %d\n", i);
-			app->zombie[i].pos.x = app->map_x + app->screen->w * (rand() % 2);
-			app->zombie[i].pos.y = map_y(app, app->zombie[i].pos.x);
 			app->zombie[i].sprite = &app->sprite_zombie;
+			app->zombie[i].frame = rand() % 
+				app->zombie[i].sprite->frame_count;
+			app->zombie[i].pos.x = app->map_x + (rand() % 2
+				? (- app->zombie[i].sprite->target_frame_size.x) 
+				: (app->screen->w + app->zombie[i].sprite->target_frame_size.x)
+			);
+			app->zombie[i].pos.y = map_y(app, app->zombie[i].pos.x);
 			app->zombie[i].health = 10;
 			app->zombie[i].active = 1;
-			app->zombie[i].frame = rand() % app->zombie[i].sprite->frame_count;
 			break;
 		}
 	}
@@ -42,7 +46,6 @@ void zombie_move(App *app) {
 	for(i=0; i<MAX_ZOMBIES; i++) {
 		Body *z = &app->zombie[i];
 		if(!z->active) continue;
-		z->frame += 0.1;
 		if(z->health < 0) {
 			if(z->action != ACTION_DEATH) {
 				z->action = ACTION_DEATH;
