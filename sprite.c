@@ -2,7 +2,6 @@
 #include <SDL_rotozoom.h>
 #include "app.h"
 
-#define ZOOM 16
 #define RGBA_FORMAT 32,0x00ff0000,0x0000ff00,0x000000ff,0xff000000
 
 void sprite_source_rect(Sprite *sprite, Action action, int frame, SDL_Rect *rect)

@@ -47,6 +47,10 @@ typedef struct {
 	int health;
 } Body;
 
+#define WIDTH 1024
+#define HEIGHT 768
+#define ZOOM 16
+#define MAP_SIZE (WIDTH/ZOOM)
 #define MAX_ZOMBIES 666
 #define MAX_MISSILES 66
 typedef struct {
@@ -63,9 +67,12 @@ typedef struct {
 	int zombie_spawn_time;
 	float zombie_spawn_delay;
 	int map_x;
+	int heightmap[MAP_SIZE];
 } App;
 
 #define MAX(a,b) ((a)>(b)?(a):(b))
+#define MIN(a,b) ((a)<(b)?(a):(b))
+#define CLAMP(x,a,b) ((x)<(a)?(a):(x)>(b)?(b):(x))
 
 void sprite_source_rect(Sprite *sprite, Action action, int frame, SDL_Rect *rect);
 void sprite_target_rect(Sprite *sprite, Action action, int frame, Direction dir, SDL_Rect *rect);
@@ -75,8 +82,9 @@ void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, in
 void body_move(App *app, Body *body);
 void body_render(App *app, Body *body);
 
+void map_init(App *app); 
 void map_move(App *app); 
-float map_y(App *app, float x);
+int map_y(App *app, int x);
 void map_render(App *app);
 
 void ninja_init(App *app); // one time setup (e.g., load sprite)

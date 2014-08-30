@@ -25,7 +25,7 @@ int main(int argc, char* args[]) {
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0 ) return 1;
 
-	app.screen = SDL_SetVideoMode(1024, 768, 32, SDL_HWSURFACE |SDL_DOUBLEBUF
+	app.screen = SDL_SetVideoMode(WIDTH, HEIGHT, 32, SDL_HWSURFACE |SDL_DOUBLEBUF
 #if RELEASE
 			|SDL_FULLSCREEN
 #endif
@@ -34,6 +34,7 @@ int main(int argc, char* args[]) {
 	SDL_WM_SetIcon(IMG_Load_RW(SDL_RWFromConstMem(icon_png, icon_png_len), 0), NULL);
 	SDL_WM_SetCaption("Ninja vs Zombies", "Ninja vs Zombies");
 
+	map_init(&app);
 	ninja_init(&app);
 	missile_init(&app);
 	zombie_init(&app);

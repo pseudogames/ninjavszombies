@@ -26,8 +26,8 @@ void zombie_spawn(App *app) {
 			if(app->zombie[i].active) continue;
 			//printf("spawn zombie %d\n", i);
 			int w = app->screen->w / 2;
-			app->zombie[i].pos.x =  app->map_x + w * (rand() % 2 ? -1 : 1);
-			app->zombie[i].pos.y = app->screen->h/2;
+			app->zombie[i].pos.x = app->map_x + w * (rand() % 2 ? -1 : 1);
+			app->zombie[i].pos.y = map_y(app, app->zombie[i].pos.x);
 			app->zombie[i].sprite = &app->sprite_zombie;
 			app->zombie[i].health = 10;
 			app->zombie[i].active = 1;
@@ -57,6 +57,7 @@ void zombie_move(App *app) {
 		Direction dir = app->ninja.pos.x < app->zombie[i].pos.x ? DIR_LEFT : DIR_RIGHT;
 		app->zombie[i].dir = dir;
 		app->zombie[i].pos.x += dir == DIR_LEFT ? -1 : +1;
+		app->zombie[i].pos.y = map_y(app, app->zombie[i].pos.x);
 	}
 
 }
