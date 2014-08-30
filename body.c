@@ -1,6 +1,8 @@
 #include "app.h"
 
 void body_render(App *app, Body *body) {
+	body->frame += 0.1;
+
 	SDL_Rect src;
 	sprite_target_rect(
 			body->sprite, 
@@ -10,12 +12,10 @@ void body_render(App *app, Body *body) {
 			&src);
 
 	SDL_Rect dest = {
-		body->pos.x - body->sprite->target_frame_size.x/2 - app->map_x,
+		body->pos.x - body->sprite->target_frame_size.x/2 - app->map_x + app->screen->w/2,
 		body->pos.y - body->sprite->target_frame_size.y/2,
 		0, 0
 	};
-
-	body->frame += 0.1;
 
 	SDL_BlitSurface(body->sprite->target, &src, app->screen, &dest);
 }

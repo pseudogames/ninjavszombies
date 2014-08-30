@@ -10,7 +10,7 @@ void ninja_init(App *app) {
 		ninja_png, ninja_png_len // source
 	);
 
-	app->ninja.pos.x = app->screen->w / 2;
+	app->ninja.pos.x = 0;
 	app->ninja.pos.y = app->screen->h / 2;
 	app->ninja.sprite = &app->sprite_ninja;
 
