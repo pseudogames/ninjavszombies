@@ -45,6 +45,7 @@ typedef struct {
 	float frame;
 	Direction dir;
 	int health;
+	int speed;
 } Body;
 
 #define WIDTH 1024

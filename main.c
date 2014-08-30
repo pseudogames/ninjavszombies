@@ -59,7 +59,7 @@ int main(int argc, char* args[]) {
 						case SDLK_SPACE:
 							missile_init(&app);
 							break;
-						case SDLK_q:
+						case SDLK_ESCAPE:
 							app.state = STATE_EXIT;
 							break;
 					}
