@@ -10,7 +10,7 @@ void body_render(App *app, Body *body) {
 			&src);
 
 	SDL_Rect dest = {
-		body->pos.x - body->sprite->target_frame_size.x/2,
+		body->pos.x - body->sprite->target_frame_size.x/2 - app->map_x,
 		body->pos.y - body->sprite->target_frame_size.y/2,
 		0, 0
 	};
@@ -20,6 +20,3 @@ void body_render(App *app, Body *body) {
 	SDL_BlitSurface(body->sprite->target, &src, app->screen, &dest);
 }
 
-void body_move(App *app, Body *body) {
-
-}

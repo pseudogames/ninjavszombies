@@ -25,7 +25,8 @@ void zombie_spawn(App *app) {
 		for(i=0; i<MAX_ZOMBIES; i++) {
 			if(app->zombie[i].active) continue;
 			//printf("spawn zombie %d\n", i);
-			app->zombie[i].pos.x = rand() % 2 ? 0 : app->screen->w;
+			int w = app->screen->w / 2;
+			app->zombie[i].pos.x =  app->map_x + w * (rand() % 2 ? -1 : 1);
 			app->zombie[i].pos.y = app->screen->h/2;
 			app->zombie[i].sprite = &app->sprite_zombie;
 			app->zombie[i].health = 10;

@@ -66,18 +66,20 @@ int main(int argc, char* args[]) {
 			}
 		}
 
+		zombie_spawn(&app);
+
+		ninja_move(&app);
+		map_move(&app);
+		missile_move(&app);
+		zombie_move(&app);
+
 		// render
 		Uint32 color = SDL_MapRGB(app.screen->format, 0xff, 0xff, 0xff );
 		SDL_FillRect(app.screen, NULL , color);
 
-		missile_move(&app);
+		map_render(&app);
 		missile_render(&app);
-
-		ninja_move(&app);
 		ninja_render(&app);
-
-		zombie_spawn(&app);
-		zombie_move(&app);
 		zombie_render(&app);
 
 		SDL_Flip(app.screen);

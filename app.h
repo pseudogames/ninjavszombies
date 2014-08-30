@@ -62,6 +62,7 @@ typedef struct {
 	int pressed[SDLK_LAST];
 	int zombie_spawn_time;
 	float zombie_spawn_delay;
+	int map_x;
 } App;
 
 #define MAX(a,b) ((a)>(b)?(a):(b))
@@ -73,6 +74,10 @@ void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, in
 
 void body_move(App *app, Body *body);
 void body_render(App *app, Body *body);
+
+void map_move(App *app); 
+float map_y(App *app, float x);
+void map_render(App *app);
 
 void ninja_init(App *app); // one time setup (e.g., load sprite)
 void ninja_spawn(App *app); // (re)spawn init pos, anim
