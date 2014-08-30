@@ -28,9 +28,9 @@ void missile_spawn(App *app) {
 	app->missile[i].pos.y = app->ninja.pos.y;
 
 	app->missile[i].speed.x =
-		(app->ninja.dir == DIR_LEFT ? -1 : +1) * TILE_SIZE*2;
+		(app->ninja.dir == DIR_LEFT ? -1 : +1) * app->screen->w/30;
 
-	app->missile[i].speed.y = -TILE_SIZE + (rand() % (TILE_SIZE/2));
+	app->missile[i].speed.y = -app->screen->h/60 + (rand() % (app->screen->h/90));
 	app->missile[i].sprite = &app->sprite_missile1;
 }
 

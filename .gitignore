@@ -3,3 +3,4 @@ data/*.h
 .depend
 /nvz*
 /NinjaVsZombie.app
+.DS_Store

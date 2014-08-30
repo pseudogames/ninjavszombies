@@ -1,7 +1,7 @@
 #include "app.h"
 
 void body_render(App *app, Body *body) {
-	body->frame += 0.1;
+	body->frame += 0.3;
 
 	SDL_Rect src;
 	sprite_target_rect(

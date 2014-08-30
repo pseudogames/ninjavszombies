@@ -17,7 +17,8 @@ typedef enum {
 } AppState;
 
 typedef enum { 
-    ACTION_MOVE=0, 
+    ACTION_IDLE=0, 
+    ACTION_MOVE, 
     ACTION_JUMP, 
     ACTION_ATTACK1, 
     ACTION_ATTACK2, 
@@ -50,7 +51,7 @@ typedef struct {
 
 #define WIDTH 1024
 #define HEIGHT 768
-#define TILE_SIZE 16
+#define TILE_SIZE 3
 #define MAP_SIZE (WIDTH/TILE_SIZE)
 #define MAX_ZOMBIES 666
 #define MAX_MISSILES 66

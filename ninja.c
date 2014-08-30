@@ -5,8 +5,8 @@ void ninja_init(App *app) {
 
 	sprite_init(&app->sprite_ninja,
 		0, 0, // origin
-		16, 16, // frame size
-		ACTION_COUNT, 4, // action, frame counts
+		80, 80, // frame size
+		ACTION_COUNT, 6, // action, frame counts
 		ninja_png, ninja_png_len // source
 	);
 
