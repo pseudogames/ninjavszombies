@@ -22,7 +22,7 @@ void missile_init(App *app) {
 
 	app->missile[last % MAX_MISSILES].pos.x = app->ninja.pos.x;
 	app->missile[last % MAX_MISSILES].pos.y = app->ninja.pos.y;
-	app->missile[last % MAX_MISSILES].speed = -35 + (rand() % 20);
+	app->missile[last % MAX_MISSILES].speed = -40 + (rand() % 20);
 	app->missile[last % MAX_MISSILES].sprite = &app->sprite_missile1;
 	last++;
 }
