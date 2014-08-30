@@ -2,6 +2,7 @@
 #include "data/missile1.h"
 #include "data/missile2.h"
 
+int last = 0;
 
 void missile_init(App *app) {
 
@@ -19,4 +20,22 @@ void missile_init(App *app) {
 		missile2_png, missile2_png_len // source
 	);
 
+	app->missile[last % MAX_MISSILES].pos.x = app->screen->w / 2;
+	app->missile[last % MAX_MISSILES].pos.y = app->screen->h / 2;
+	app->missile[last % MAX_MISSILES].sprite = &app->sprite_missile1;
+	last++;
+}
+
+void missile_move(App *app) {
+	int i;
+	for(i = 0; i < (last < MAX_MISSILES ? (last) : (last % MAX_MISSILES)); i++) {
+		app->missile[i].pos.x += 10;
+	}
+}
+
+void missile_render(App *app) {
+	int i;
+	for(i = 0; i < (last < MAX_MISSILES ? (last) : (last % MAX_MISSILES)); i++) {
+		body_render(app, &app->missile[i]);
+	}
 }

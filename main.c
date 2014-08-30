@@ -39,6 +39,16 @@ int main(int argc, char* args[]) {
 	zombie_init(&app);
 
 	while(app.state != STATE_EXIT) {
+		// render
+		Uint32 startTime = SDL_GetTicks();
+		Uint32 color = SDL_MapRGB(app.screen->format, 0xff, 0xff, 0xff );
+		SDL_FillRect(app.screen, NULL , color);
+
+		ninja_move(&app);
+		ninja_render(&app);
+
+		//missile_move(&app);
+		//missile_render(&app);
 
 		// input
 		SDL_Event event;
@@ -48,13 +58,15 @@ int main(int argc, char* args[]) {
 				case SDL_KEYUP:
 					app.pressed[event.key.keysym.sym] = event.type == SDL_KEYDOWN;
 			}
-
 			switch(event.type) {
 				case SDL_QUIT:
 					app.state = STATE_EXIT;
 					break;
 				case SDL_KEYDOWN:
 					switch(event.key.keysym.sym) {
+						case SDLK_SPACE:
+							missile_init(&app);
+							break;
 						case SDLK_q:
 							app.state = STATE_EXIT;
 							break;
@@ -62,6 +74,8 @@ int main(int argc, char* args[]) {
 					break;
 			}
 		}
+		missile_move(&app);
+		missile_render(&app);
 
 		// render
 		Uint32 startTime = SDL_GetTicks();
@@ -71,7 +85,6 @@ int main(int argc, char* args[]) {
 		ninja_move(&app);
 		ninja_render(&app);
 
-		// enemies
 		zombie_spawn(&app);
 		zombie_move(&app);
 		zombie_render(&app);
@@ -79,6 +92,4 @@ int main(int argc, char* args[]) {
 		SDL_Flip(app.screen);
 		handleDelay(startTime);
 	}
-
 }
-
