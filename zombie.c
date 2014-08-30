@@ -11,7 +11,7 @@ void zombie_init(App *app) {
 	);
 
 	app->zombie_spawn_time = SDL_GetTicks();
-	app->zombie_spawn_delay = 2000;
+	app->zombie_spawn_delay = 5000;
 }
 
 void zombie_spawn(App *app) {
@@ -20,13 +20,12 @@ void zombie_spawn(App *app) {
 	if(t > app->zombie_spawn_time + app->zombie_spawn_delay) {
 		//printf("search free zombie slot\n");
 		app->zombie_spawn_time = t;
-		app->zombie_spawn_delay *= 0.95;
+		app->zombie_spawn_delay *= 0.99;
 
 		for(i=0; i<MAX_ZOMBIES; i++) {
 			if(app->zombie[i].active) continue;
 			//printf("spawn zombie %d\n", i);
-			int w = app->screen->w / 2;
-			app->zombie[i].pos.x = app->map_x + w * (rand() % 2 ? -1 : 1);
+			app->zombie[i].pos.x = app->map_x + app->screen->w * (rand() % 2);
 			app->zombie[i].pos.y = map_y(app, app->zombie[i].pos.x);
 			app->zombie[i].sprite = &app->sprite_zombie;
 			app->zombie[i].health = 10;

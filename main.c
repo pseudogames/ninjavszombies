@@ -39,6 +39,8 @@ int main(int argc, char* args[]) {
 	missile_init(&app);
 	zombie_init(&app);
 
+	ninja_spawn(&app);
+
 	while(app.state != STATE_EXIT) {
 		Uint32 startTime = SDL_GetTicks();
 		
@@ -57,7 +59,7 @@ int main(int argc, char* args[]) {
 				case SDL_KEYDOWN:
 					switch(event.key.keysym.sym) {
 						case SDLK_SPACE:
-							missile_init(&app);
+							missile_spawn(&app);
 							break;
 						case SDLK_ESCAPE:
 							app.state = STATE_EXIT;

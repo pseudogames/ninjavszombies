@@ -28,8 +28,8 @@ void sprite_gen_target(Sprite *sprite)
     zoomSurfaceSize(
             sprite->frame_size.x,
             sprite->frame_size.y,
-            ZOOM,  // no zoom
-            ZOOM,  // no zoom
+            TILE_SIZE,  // no zoom
+            TILE_SIZE,  // no zoom
             &sprite->target_frame_size.x,
             &sprite->target_frame_size.y
             );
@@ -66,7 +66,7 @@ void sprite_gen_target(Sprite *sprite)
                 sprite_target_rect(sprite, action, frame, dir, &dst);
                 SDL_FillRect(element, NULL, 0x00000000);
                 SDL_BlitSurface( sprite->source, &src, element, NULL );
-                SDL_Surface *zoom = zoomSurface(element, (dir ? 1 : -1) * ZOOM, ZOOM, SMOOTHING_OFF);
+                SDL_Surface *zoom = zoomSurface(element, (dir ? 1 : -1) * TILE_SIZE, TILE_SIZE, SMOOTHING_OFF);
                 SDL_SetAlpha(zoom,0,0);
                 SDL_SetColorKey(zoom,0,0);
                 dst.x += dst.w/2 - zoom->w/2;

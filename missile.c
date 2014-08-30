@@ -2,8 +2,6 @@
 #include "data/missile1.h"
 #include "data/missile2.h"
 
-int last = 0;
-
 void missile_init(App *app) {
 
 	sprite_init(&app->sprite_missile1,
@@ -20,25 +18,36 @@ void missile_init(App *app) {
 		missile2_png, missile2_png_len // source
 	);
 
-	app->missile[last % MAX_MISSILES].pos.x = app->ninja.pos.x;
-	app->missile[last % MAX_MISSILES].pos.y = app->ninja.pos.y;
-	app->missile[last % MAX_MISSILES].speed = -40 + (rand() % 20);
-	app->missile[last % MAX_MISSILES].sprite = &app->sprite_missile1;
-	last++;
+}
+
+void missile_spawn(App *app) {
+
+	int i = (app->missile_index++) % MAX_MISSILES;
+	app->missile[i].active = 1;
+	app->missile[i].pos.x = app->ninja.pos.x;
+	app->missile[i].pos.y = app->ninja.pos.y;
+
+	app->missile[i].speed.x =
+		(app->ninja.dir == DIR_LEFT ? -1 : +1) * TILE_SIZE*2;
+
+	app->missile[i].speed.y = -TILE_SIZE + (rand() % (TILE_SIZE/2));
+	app->missile[i].sprite = &app->sprite_missile1;
 }
 
 void missile_move(App *app) {
 	int i;
-	for(i = 0; i < (last < MAX_MISSILES ? (last) : (last % MAX_MISSILES)); i++) {
-		app->missile[i].pos.x += 25;
-		app->missile[i].speed += 5;
-		app->missile[i].pos.y = app->missile[i].pos.y + app->missile[i].speed;
+	for(i = 0; i < MAX_MISSILES; i++) {
+		if(!app->missile[i].active) continue;
+		app->missile[i].speed.y += 2;
+		app->missile[i].pos.x += app->missile[i].speed.x;
+		app->missile[i].pos.y += app->missile[i].speed.y;
 	}
 }
 
 void missile_render(App *app) {
 	int i;
-	for(i = 0; i < (last < MAX_MISSILES ? (last) : (last % MAX_MISSILES)); i++) {
+	for(i = 0; i < MAX_MISSILES; i++) {
+		if(!app->missile[i].active) continue;
 		body_render(app, &app->missile[i]);
 	}
 }

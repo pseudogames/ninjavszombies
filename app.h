@@ -45,13 +45,13 @@ typedef struct {
 	float frame;
 	Direction dir;
 	int health;
-	int speed;
+	Point speed;
 } Body;
 
 #define WIDTH 1024
 #define HEIGHT 768
-#define ZOOM 16
-#define MAP_SIZE (WIDTH/ZOOM)
+#define TILE_SIZE 16
+#define MAP_SIZE (WIDTH/TILE_SIZE)
 #define MAX_ZOMBIES 666
 #define MAX_MISSILES 66
 typedef struct {
@@ -68,7 +68,12 @@ typedef struct {
 	int zombie_spawn_time;
 	float zombie_spawn_delay;
 	int map_x;
+	int map_y;
+	int heightmap_x;
 	int heightmap[MAP_SIZE];
+	int map_step_x;
+	int map_step_delay;
+	int missile_index;
 } App;
 
 #define MAX(a,b) ((a)>(b)?(a):(b))
@@ -85,7 +90,9 @@ void body_render(App *app, Body *body);
 
 void map_init(App *app); 
 void map_move(App *app); 
-int map_y(App *app, int x);
+inline int map_y(App *app, int x);
+inline int map_y0(App *app, int x);
+inline int map_y1(App *app, int x);
 void map_render(App *app);
 
 void ninja_init(App *app); // one time setup (e.g., load sprite)
