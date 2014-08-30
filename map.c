@@ -43,11 +43,11 @@ void map_move(App *app) {
 	int i;
 	
 	if(app->ninja.pos.y - app->map_y > app->screen->h * 0.7  ) {
-		app->map_y += app->screen->h/20;
+		app->map_y += app->screen->h/50;
 	}
 
 	if(app->ninja.pos.y - app->map_y < app->screen->h * 0.4  ) {
-		app->map_y -= app->screen->h/20;
+		app->map_y -= app->screen->h/50;
 	}
 
 	while(app->ninja.pos.x - app->map_x > app->screen->w * 0.6) {

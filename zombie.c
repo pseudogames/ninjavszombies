@@ -5,8 +5,8 @@ void zombie_init(App *app) {
 
 	sprite_init(&app->sprite_zombie,
 		0, 0, // origin
-		16, 16, // frame size
-		ACTION_COUNT, 4, // action, frame counts
+		84, 84, // frame size
+		ACTION_COUNT, 6, // action, frame counts
 		zombie_png, zombie_png_len // source
 	);
 
@@ -30,6 +30,7 @@ void zombie_spawn(App *app) {
 			app->zombie[i].sprite = &app->sprite_zombie;
 			app->zombie[i].health = 10;
 			app->zombie[i].active = 1;
+			app->zombie[i].frame = rand() % app->zombie[i].sprite->frame_count;
 			break;
 		}
 	}

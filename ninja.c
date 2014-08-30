@@ -22,7 +22,11 @@ void ninja_spawn(App *app) {
 
 void ninja_move(App *app) {
 
-	app->ninja.action = app->pressed[SDLK_SPACE] ? ACTION_ATTACK1 : ACTION_MOVE;
+	app->ninja.action = ACTION_IDLE;
+	if(app->pressed[SDLK_LEFT] || app->pressed[SDLK_RIGHT])
+		app->ninja.action = ACTION_MOVE;
+	if(app->pressed[SDLK_SPACE])
+		app->ninja.action = ACTION_ATTACK1;
 
 	if(app->pressed[SDLK_LEFT]
 	&& app->ninja.pos.x - app->map_x > app->sprite_ninja.target_frame_size.x/2) {
