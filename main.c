@@ -39,17 +39,8 @@ int main(int argc, char* args[]) {
 	zombie_init(&app);
 
 	while(app.state != STATE_EXIT) {
-		// render
 		Uint32 startTime = SDL_GetTicks();
-		Uint32 color = SDL_MapRGB(app.screen->format, 0xff, 0xff, 0xff );
-		SDL_FillRect(app.screen, NULL , color);
-
-		ninja_move(&app);
-		ninja_render(&app);
-
-		//missile_move(&app);
-		//missile_render(&app);
-
+		
 		// input
 		SDL_Event event;
 		while(SDL_PollEvent(&event)) {
@@ -74,13 +65,13 @@ int main(int argc, char* args[]) {
 					break;
 			}
 		}
-		missile_move(&app);
-		missile_render(&app);
 
 		// render
-		Uint32 startTime = SDL_GetTicks();
 		Uint32 color = SDL_MapRGB(app.screen->format, 0xff, 0xff, 0xff );
 		SDL_FillRect(app.screen, NULL , color);
+
+		missile_move(&app);
+		missile_render(&app);
 
 		ninja_move(&app);
 		ninja_render(&app);

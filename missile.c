@@ -29,7 +29,7 @@ void missile_init(App *app) {
 void missile_move(App *app) {
 	int i;
 	for(i = 0; i < (last < MAX_MISSILES ? (last) : (last % MAX_MISSILES)); i++) {
-		app->missile[i].pos.x += 10;
+		app->missile[i].pos.x += 25;
 	}
 }
 
