@@ -13,7 +13,7 @@ void body_render(App *app, Body *body) {
 
 	SDL_Rect dest = {
 		body->pos.x - body->sprite->target_frame_size.x/2 - app->map_x,
-		body->pos.y - body->sprite->target_frame_size.y/2 - app->map_y,
+		body->pos.y - body->sprite->target_frame_size.y*0.4 - app->map_y,
 		0, 0
 	};
 

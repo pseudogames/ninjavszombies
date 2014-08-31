@@ -40,29 +40,50 @@ void missile_spawn(App *app) {
 		forward_x += app->missile[i].speed.x * TILE_SIZE;
 		forward_y += map_y(app, forward_x);
 		c++;
-		n = forward_y > y ? 8 : 4;
+		n = forward_y/c < y ? 8 : 4;
 	}
 	forward_y /= c;
 	int delta_y = forward_y - y;
 	delta_y /= 8;
 
+	printf("shot %d %d %d %d\n", n, delta_y, app->missile[i].pos.x, forward_x);
 
 	app->missile[i].speed.y = -app->screen->h/60 + (rand() % (app->screen->h/90)) + delta_y;
 	app->missile[i].sprite = &app->sprite_missile1;
 }
 
 void missile_move(App *app) {
-	int i;
+	int i, j;
 	for(i = 0; i < MAX_MISSILES; i++) {
 		if(!app->missile[i].active) continue;
 		app->missile[i].speed.y += 2;
 		app->missile[i].pos.x += app->missile[i].speed.x;
 		app->missile[i].pos.y += app->missile[i].speed.y;
+
+		int ceil = map_y0(app, app->missile[i].pos.x);
+		int floor = map_y1(app, app->missile[i].pos.x);
+		if(app->missile[i].pos.y < ceil
+		|| app->missile[i].pos.y > floor) {
+			app->missile[i].active = 0;
+			printf("wall\n");
+		}
+
+		// hit enemies
+		for(j=0; j<MAX_ZOMBIES; j++) {
+			Body *z = &app->zombie[j];
+			if(!z->active) continue;
+
+			int dist = ABS(app->missile[i].pos.x - app->zombie[j].pos.x);
+			if(dist < app->sprite_zombie.target_frame_size.x/4) {
+				app->missile[i].active = 0;
+				blood_spawn(app, app->zombie[j].pos);
+				app->zombie[j].health --;
+				printf("enemy\n");
+				continue;
+			}
+		}
 	}
 
-	// TODO hit enemies
-	// TODO hit ground
-	// TODO time to live
 	// TODO proper sprite art
 }
 

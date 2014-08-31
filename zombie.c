@@ -40,7 +40,6 @@ void zombie_spawn(App *app) {
 		}
 	}
 
-	// TODO despawn if too far
 }
 
 void zombie_move(App *app) {
@@ -51,38 +50,44 @@ void zombie_move(App *app) {
 	for(i=0; i<MAX_ZOMBIES; i++) {
 		Body *z = &app->zombie[i];
 		if(!z->active) continue;
+
+		int dist = ABS(app->ninja.pos.x - app->zombie[i].pos.x);
+		if(dist > app->screen->w) {
+			z->active = 0;
+			continue;
+		}
+
 		if(z->health < 0) {
 			if(z->action != ACTION_DEATH) {
 				z->action = ACTION_DEATH;
 				z->frame = 0;
 			} else {
-				if(z->frame > z->sprite->frame_count) {
+				if((((int)ceil(z->frame)) % z->sprite->frame_count) == 0 ) {
 					z->active = 0;
 				}
 			}
 			break;
 		}
 
+
 		// damage potential
 		float ideal_dist = (
 			app->ninja.sprite->target_frame_size.x/2+
-			app->zombie[i].sprite->target_frame_size.x/2
+			z->sprite->target_frame_size.x/2
 		)/2;
 
-		float max_damage = 1 - CLAMP(ABS(
-			ABS(app->ninja.pos.x - app->zombie[i].pos.x) - ideal_dist
-		) / ideal_dist, 0, 1);
+		float max_damage = 1 - CLAMP(ABS( dist - ideal_dist ) / ideal_dist, 0, 1);
 
 		float damage = 0;
 
-		if(app->zombie[i].action == ACTION_ATTACK1
-		&&((int)app->zombie[i].frame == 2 || (int)app->zombie[i].frame == 4)) {
+		if(z->action == ACTION_ATTACK1
+		&&((int)z->frame == 2 || (int)z->frame == 4)) {
 			damage = max_damage * 4;
 		}
-		if(app->zombie[i].action == ACTION_MOVE && (int)app->zombie[i].frame == 5) {
+		if(z->action == ACTION_MOVE && (int)z->frame == 5) {
 			damage = max_damage * 2;
 		}
-		if(app->zombie[i].action == ACTION_JUMP && (int)app->zombie[i].frame >0) {
+		if(z->action == ACTION_JUMP && (int)z->frame >0) {
 			damage = max_damage * 1;
 		}
 
@@ -91,37 +96,34 @@ void zombie_move(App *app) {
 		}
 				
 		// move to ninja
-		Direction dir = app->ninja.pos.x < app->zombie[i].pos.x
-			? DIR_LEFT : DIR_RIGHT;
-		app->zombie[i].dir = dir;
+		Direction dir = app->ninja.pos.x < z->pos.x ? DIR_LEFT : DIR_RIGHT;
+		z->dir = dir;
 
-		int close_range =
-			ABS(app->ninja.pos.x - app->zombie[i].pos.x) < ideal_dist * 0.8;
-		app->zombie[i].close_range = close_range;
+		int close_range = ABS(app->ninja.pos.x - z->pos.x) < ideal_dist * 0.8;
+		z->close_range = close_range;
 
-		int ninja_facing = (app->ninja.dir == DIR_RIGHT ? 1 : -1) * (app->zombie[i].pos.x - app->ninja.pos.x);
+		int ninja_facing = (app->ninja.dir == DIR_RIGHT ? 1 : -1) * (z->pos.x - app->ninja.pos.x);
 		if(ninja_facing > -ideal_dist * 0.3 && ninja_facing < ideal_dist * 1.3) {
 			app->ninja.close_range = i;
 		}
 
-		if(app->zombie[i].action == ACTION_MOVE) {
+		if(z->action == ACTION_MOVE) {
 			// attack if too close
 			if(max_damage > 0.8 || close_range) {
 				if(close_range && (rand() % FPS) != 0) {
-					app->zombie[i].action = ACTION_IDLE;
+					z->action = ACTION_IDLE;
 				} else {
-					app->zombie[i].action = app->ninja.action == ACTION_JUMP
+					z->action = app->ninja.action == ACTION_JUMP
 						? ACTION_JUMP : ACTION_ATTACK1;
 				}
-				app->zombie[i].frame = 0;
+				z->frame = 0;
 			} else {
-				app->zombie[i].pos.x += dir == DIR_LEFT ? -1 : +1;
-				app->zombie[i].pos.y = map_y(app, app->zombie[i].pos.x);
+				z->pos.x += dir == DIR_LEFT ? -1 : +1;
+				z->pos.y = map_y(app, z->pos.x);
 			}
 
-		} else if((((int)ceil(app->zombie[i].frame))
-		% app->zombie[i].sprite->frame_count) == 0 ) {
-			app->zombie[i].action = rand() % 2 ? ACTION_MOVE : ACTION_IDLE;
+		} else if((((int)ceil(z->frame)) % z->sprite->frame_count) == 0 ) {
+			z->action = rand() % 2 ? ACTION_MOVE : ACTION_IDLE;
 		}
 
 	}
