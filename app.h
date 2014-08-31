@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 typedef enum {
 	DIR_LEFT=0,
@@ -81,6 +82,10 @@ typedef struct {
 	int blood_y;
 	SDL_Surface *blood;
 	SDL_Surface *blood_off;
+	TTF_Font *font;
+	int start_x;
+	int end_x;
+	int kills;
 } App;
 
 #define MAX(a,b) ((a)>(b)?(a):(b))

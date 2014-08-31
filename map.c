@@ -14,14 +14,17 @@ void map_init(App *app) {
 
 void map_move(App *app) {
 	int i;
+	if(app->ninja.pos.x >= app->end_x) {
+		app->end_x = app->ninja.pos.x;
+	}
 	
 	if(app->ninja.pos.y - app->map_y > app->screen->h * 0.7
-	&& app->ninja.dir == DIR_RIGHT) {
+	&& app->ninja.pos.x >= app->end_x) {
 		app->map_y ++;
 	}
 
 	if(app->ninja.pos.y - app->map_y < app->screen->h * 0.4
-	&& app->ninja.dir == DIR_RIGHT) {
+	&& app->ninja.pos.x >= app->end_x) {
 		app->map_y --;
 	}
 

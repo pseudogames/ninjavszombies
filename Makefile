@@ -27,6 +27,7 @@ data/icon.h \
 data/ninja.h \
 data/zombie.h \
 data/missile.h \
+data/karate.h \
 
 .PHONY: all clean depend mac win
 

@@ -52,12 +52,14 @@ void zombie_move(App *app) {
 		Body *z = &app->zombie[i];
 		if(!z->active) continue;
 
+		// despawn: too far from the screen
 		int dist = ABS(app->ninja.pos.x - app->zombie[i].pos.x);
 		if(dist > app->screen->w) {
 			z->active = 0;
 			continue;
 		}
 
+		// dead
 		if(z->health < 0) {
 			if(z->action != ACTION_DEATH) {
 				z->action = ACTION_DEATH;
@@ -65,6 +67,7 @@ void zombie_move(App *app) {
 			} else {
 				if((((int)ceil(z->frame)) % z->sprite->frame_count) == 0 ) {
 					z->active = 0;
+					app->kills ++;
 				}
 			}
 			break;

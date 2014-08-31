@@ -32,6 +32,7 @@ int main(int argc, char* args[]) {
 	SDL_WM_SetIcon(IMG_Load_RW(SDL_RWFromConstMem(icon_png, icon_png_len), 0), NULL);
 	SDL_WM_SetCaption("Ninja vs Zombies", "Ninja vs Zombies");
 
+
 	map_init(&app);
 	ninja_init(&app);
 	missile_init(&app);
@@ -87,4 +88,7 @@ int main(int argc, char* args[]) {
 		SDL_Flip(app.screen);
 		handleDelay(startTime);
 	}
+
+	TTF_Quit();
+	SDL_Quit();
 }

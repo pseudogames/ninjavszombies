@@ -1,6 +1,9 @@
 #include "app.h"
 #include "data/ninja.h"
-	
+#include "data/karate.h"
+
+#define HUD_SIZE (TILE_SIZE * 6)
+
 void ninja_init(App *app) {
 
 	sprite_init(&app->sprite_ninja,
@@ -13,6 +16,10 @@ void ninja_init(App *app) {
 
 	app->ninja.sprite = &app->sprite_ninja;
 
+    TTF_Init();
+    app->font = TTF_OpenFontRW(SDL_RWFromConstMem(karate_ttf,karate_ttf_len), 0, HUD_SIZE*1.5);
+
+
 }
 
 void ninja_spawn(App *app) {
@@ -23,6 +30,8 @@ void ninja_spawn(App *app) {
 	app->ninja.action = ACTION_IDLE;
 	app->ninja.frame = 0;
 	app->ninja.close_range = -1;
+	app->start_x = app->map_x;
+	app->kills = 0;
 }
 
 void ninja_move(App *app) {
@@ -111,15 +120,23 @@ void ninja_move(App *app) {
 void ninja_render(App *app) {
 	Uint32 color = SDL_MapRGB(app->screen->format, 0xff, 0x00, 0x00 );
 	SDL_Rect rect = {
-		TILE_SIZE,
-		TILE_SIZE,
+		HUD_SIZE,
+		HUD_SIZE,
 		MAX(0,app->ninja.health),
-		TILE_SIZE * 4
+		HUD_SIZE
 	};
 	SDL_FillRect(app->screen, &rect, color);
 
-	// TODO timer
-	// TODO distance
+	// score: timer, distance, ...
+	char text[256];
+	snprintf(text, sizeof(text)-1, "%d Ninja vs. Zombies %d",
+		app->end_x - app->start_x, app->kills);
+	SDL_Color red = { 0xff, 0x00, 0x00, 0xff };
+	SDL_Surface *hud = TTF_RenderText_Blended(app->font, text, red);
+	rect.x = app->screen->w - hud->w - HUD_SIZE;
+    SDL_BlitSurface(hud, NULL, app->screen, &rect);
+    SDL_FreeSurface(hud);
+
 
 	body_render(app, &app->ninja);
 }

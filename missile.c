@@ -40,8 +40,6 @@ void missile_spawn(App *app) {
 	int delta_y = forward_y - y;
 	delta_y /= 8;
 
-	printf("shot %d %d %d %d\n", n, delta_y, app->missile[i].pos.x, forward_x);
-
 	app->missile[i].speed.y = -app->screen->h/60 + (rand() % (app->screen->h/90)) + delta_y;
 	app->missile[i].sprite = &app->sprite_missile;
 }
@@ -59,7 +57,6 @@ void missile_move(App *app) {
 		if(app->missile[i].pos.y < ceil
 		|| app->missile[i].pos.y > floor) {
 			app->missile[i].active = 0;
-			printf("wall\n");
 		}
 
 		// hit enemies
@@ -72,7 +69,6 @@ void missile_move(App *app) {
 				app->missile[i].active = 0;
 				blood_spawn(app, app->zombie[j].pos);
 				app->zombie[j].health --;
-				printf("enemy\n");
 				continue;
 			}
 		}
