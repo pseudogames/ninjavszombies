@@ -1,5 +1,42 @@
 #include <math.h>
 #include "app.h"
+#include "SDL_gfxPrimitives.h"
+
+#define BLOOD_DROPS 5
+
+typedef struct {
+	Point pos;
+	int radius;
+} Drop;
+
+Drop drops[MAX_ZOMBIES * BLOOD_DROPS];
+int number_of_drops = 0;
+
+void draw_blood_flow(App *app) {
+	int i;
+	for(i = 0; i < (number_of_drops % (MAX_ZOMBIES * BLOOD_DROPS)); i++) {
+		drops[i].pos.y++;
+
+		filledCircleRGBA(app->blood, drops[i].pos.x - app->heightmap_x, drops[i].pos.y, drops[i].radius - 7, 0xfe, 0, 0, 0xfe);
+	}
+}
+
+void draw_blood(App *app) {
+	int i;
+	for(i = 0; i < BLOOD_DROPS; i++) {
+		int hx = (rand() % 50) * ((rand() % 2) ? 1 : (-1));
+		int hy = (rand() % 50) * ((rand() % 2) ? 1 : (-1));
+		int radius = 5 + (rand() % 20);
+		Drop drop;
+		drop.pos.x = app->screen->w/2 + hx;
+		drop.pos.y = app->screen->h/3 + hy;
+		drop.radius = radius;
+		//aacircleRGBA(app->blood, app->screen->w/2 + hx, app->screen->h/3 + hy, radius, 0xfe, 0, 0, 0xfe);
+		filledCircleRGBA(app->blood, drop.pos.x, drop.pos.y, drop.radius, 0xfe, 0, 0, 0xfe);
+		drops[number_of_drops] = drop;
+		number_of_drops++;
+	}
+}
 
 void map_init(App *app) {
 	int i;
@@ -24,19 +61,7 @@ void map_init(App *app) {
             RGBA_FORMAT);
 
     SDL_SetAlpha(app->blood_off,0,0xff);
-
-	{ // debug
-		Uint32 color = SDL_MapRGBA(app->blood->format, 0xff,0,0,0xff );
-		SDL_Rect rect = {
-			app->screen->w/2,
-			app->screen->h/3,
-			TILE_SIZE*10,
-			TILE_SIZE*10
-		};
-		SDL_FillRect(app->blood, &rect, color);
-	}
-
-
+    draw_blood(app);
 }
 
 void map_move(App *app) {
@@ -89,9 +114,6 @@ void map_move(App *app) {
 				SDL_SetAlpha(app->blood, SDL_SRCALPHA, 0xff);
 			}
 
-			{ // clear last bit
-			}
-
 			int p0 = app->heightmap[MAP_SIZE-3];
 			int p1 = app->heightmap[MAP_SIZE-2];
 			int p2 = p1;
@@ -139,5 +161,6 @@ void map_render(App *app) {
 		SDL_FillRect(app->screen, &rect_top    , color);
 		SDL_FillRect(app->screen, &rect_bottom , color);
 	}
-}
 
+	draw_blood_flow(app);
+}
