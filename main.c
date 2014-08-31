@@ -36,9 +36,10 @@ int main(int argc, char* args[]) {
 	ninja_init(&app);
 	missile_init(&app);
 	zombie_init(&app);
-	ninja_spawn(&app);
 	blood_init(&app);
 
+	ninja_spawn(&app);
+    blood_spawn(&app, app.ninja.pos);
 
 	while(app.state != STATE_EXIT) {
 		Uint32 startTime = SDL_GetTicks();

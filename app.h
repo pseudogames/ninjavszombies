@@ -77,6 +77,8 @@ typedef struct {
 	int heightmap[MAP_SIZE];
 	int heightmap_ceil[MAP_SIZE];
 	int missile_index;
+	int blood_x;
+	int blood_y;
 	SDL_Surface *blood;
 	SDL_Surface *blood_off;
 } App;

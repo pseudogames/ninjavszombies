@@ -4,10 +4,12 @@
 void map_init(App *app) {
 	int i;
 	for(i=0; i<MAP_SIZE; i++) {
+		app->heightmap_ceil[i] =
 		app->heightmap[i] = 0;
-		app->heightmap_ceil[i] = 0;
 	}
 
+	app->map_x = 0;
+	app->map_y = -app->screen->h/4;
 }
 
 void map_move(App *app) {
@@ -34,34 +36,6 @@ void map_move(App *app) {
 				app->heightmap_ceil[i] = app->heightmap_ceil[i+1];
 			}
 
-			{ // move blood
-				SDL_Rect src = {
-					TILE_SIZE,
-					0,
-					app->blood->w - TILE_SIZE,
-					app->blood->h
-				};
-
-				SDL_Rect dst = {
-					0,
-					0,
-					app->blood->w - TILE_SIZE,
-					app->blood->h
-				};
-
-				SDL_Rect clear = {
-					app->blood->w - TILE_SIZE,
-					0,
-					TILE_SIZE,
-					app->blood->h
-				};
-				SDL_FillRect(app->blood_off, &clear, 0);
-
-				SDL_SetAlpha(app->blood, 0, 0xff);
-				SDL_BlitSurface( app->blood, &src, app->blood_off, &dst );
-				SDL_BlitSurface( app->blood_off, NULL, app->blood, NULL );
-				SDL_SetAlpha(app->blood, SDL_SRCALPHA, 0xff);
-			}
 
 			int ramp = 0;
 			for(i=0; i<MAP_SIZE-1; i++) {
@@ -92,6 +66,7 @@ void map_move(App *app) {
 			app->heightmap_ceil[MAP_SIZE-1] = p2c;
 		}
 	}
+
 }
 
 inline int map_y(App *app, int x) {
