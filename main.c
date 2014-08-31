@@ -37,6 +37,7 @@ int main(int argc, char* args[]) {
 	ninja_init(&app);
 	missile_init(&app);
 	zombie_init(&app);
+	blood_init(&app);
 
 	ninja_spawn(&app);
 
@@ -74,11 +75,13 @@ int main(int argc, char* args[]) {
 		map_move(&app);
 		missile_move(&app);
 		zombie_move(&app);
+		blood_move(&app);
 
 		// render
 		Uint32 color = SDL_MapRGB(app.screen->format, 0xff, 0xff, 0xff );
 		SDL_FillRect(app.screen, NULL , color);
 
+		blood_render(&app);
 		map_render(&app);
 		missile_render(&app);
 		ninja_render(&app);

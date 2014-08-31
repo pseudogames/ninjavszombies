@@ -101,6 +101,11 @@ inline int map_y0(App *app, int x);
 inline int map_y1(App *app, int x);
 void map_render(App *app);
 
+void blood_init(App *app); 
+void blood_spawn(App *app, Point pos); 
+void blood_move(App *app); 
+void blood_render(App *app);
+
 void ninja_init(App *app); // one time setup (e.g., load sprite)
 void ninja_spawn(App *app); // (re)spawn init pos, anim
 void ninja_move(App *app); // keyaboard input and inertia (e.g, jump), check if died, change action, attack

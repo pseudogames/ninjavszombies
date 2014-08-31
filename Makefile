@@ -20,7 +20,7 @@ else # linux
 endif
 endif
 
-OBJS=main.o sprite.o body.o ninja.o zombie.o missile.o map.o
+OBJS=main.o sprite.o body.o ninja.o zombie.o missile.o map.o blood.o
 
 INCS=\
 data/icon.h \
