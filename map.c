@@ -19,12 +19,12 @@ void map_move(App *app) {
 	}
 	
 	if(app->ninja.pos.y - app->map_y > app->screen->h * 0.7
-	&& app->ninja.pos.x >= app->end_x) {
+	&& app->ninja.pos.x >= app->end_x - app->screen->w / 4) { // FIXME allow advance
 		app->map_y ++;
 	}
 
 	if(app->ninja.pos.y - app->map_y < app->screen->h * 0.4
-	&& app->ninja.pos.x >= app->end_x) {
+	&& app->ninja.pos.x >= app->end_x - app->screen->w / 4) {
 		app->map_y --;
 	}
 

@@ -1,7 +1,7 @@
 #include "app.h"
 
 void body_render(App *app, Body *body) {
-	body->frame += 1.0 / body->sprite->zoom_factor; // XXX the smaller the faster
+	body->frame += body->sprite->frame_step;
 
 	SDL_Rect src;
 	sprite_target_rect(

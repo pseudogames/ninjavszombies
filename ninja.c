@@ -11,7 +11,7 @@ void ninja_init(App *app) {
 		80, 80, // frame size
 		ACTION_COUNT, 6, // action, frame counts
 		ninja_png, ninja_png_len, // source
-		TILE_SIZE
+		TILE_SIZE, 10
 	);
 
 	app->ninja.sprite = &app->sprite_ninja;
@@ -30,7 +30,8 @@ void ninja_spawn(App *app) {
 	app->ninja.action = ACTION_IDLE;
 	app->ninja.frame = 0;
 	app->ninja.close_range = -1;
-	app->start_x = app->map_x;
+	app->start_x = app->ninja.pos.x;
+	app->end_x = app->ninja.pos.x;
 	app->kills = 0;
 }
 

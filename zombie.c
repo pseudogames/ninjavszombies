@@ -9,31 +9,33 @@ void zombie_init(App *app) {
 		84, 84, // frame size
 		ACTION_COUNT, 6, // action, frame counts
 		zombie_png, zombie_png_len, // source
-		TILE_SIZE
+		TILE_SIZE, 5
 	);
 
-	app->zombie_spawn_time = SDL_GetTicks();
-	app->zombie_spawn_delay = 5000;
+	app->zombie_spawn_time = app->end_x;
+	app->zombie_spawn_delay = 500;
 }
 
 void zombie_spawn(App *app) {
 	int i;
-	int t = SDL_GetTicks();
+	int t = app->end_x;
 	if(t > app->zombie_spawn_time + app->zombie_spawn_delay) {
 		//printf("search free zombie slot\n");
 		app->zombie_spawn_time = t;
-		app->zombie_spawn_delay *= 0.99;
+		app->zombie_spawn_delay *= 0.95;
+		printf("l %f\n", app->zombie_spawn_delay);
 
 		for(i=0; i<MAX_ZOMBIES; i++) {
 			if(app->zombie[i].active) continue;
 			//printf("spawn zombie %d\n", i);
 			app->zombie[i].sprite = &app->sprite_zombie;
-			app->zombie[i].frame = rand() % 
-				app->zombie[i].sprite->frame_count;
-			app->zombie[i].pos.x = app->map_x + (rand() % 2
+			app->zombie[i].action = ACTION_IDLE;
+			app->zombie[i].frame = rand() % app->zombie[i].sprite->frame_count;
+			app->zombie[i].pos.x = app->map_x + ((rand() % 4) == 0
 				? (- app->zombie[i].sprite->target_frame_size.x) 
 				: (app->screen->w + app->zombie[i].sprite->target_frame_size.x)
 			);
+			printf("s %d\n", app->zombie[i].pos.x);
 			app->zombie[i].pos.y = map_y(app, app->zombie[i].pos.x);
 			app->zombie[i].health = 10;
 			app->zombie[i].active = 1;
@@ -85,14 +87,17 @@ void zombie_move(App *app) {
 		float damage = 0;
 
 		if(z->action == ACTION_ATTACK1
-		&&((int)z->frame == 2 || (int)z->frame == 4)) {
+		&& (int)z->frame == 4) {
 			damage = max_damage * 4;
 		}
-		if(z->action == ACTION_MOVE && (int)z->frame == 5) {
-			damage = max_damage * 2;
-		}
-		if(z->action == ACTION_JUMP && (int)z->frame >0) {
+		if(z->action == ACTION_MOVE
+		&& (int)z->frame == 4 && (int)z->frame == 5) {
 			damage = max_damage * 1;
+		}
+		if(z->action == ACTION_JUMP
+		&& app->ninja.action == ACTION_JUMP
+		&& (int)z->frame > 0 && (int)z->frame < 5) {
+			damage = max_damage * (rand() % 2);
 		}
 
 		if(damage > 0) {
@@ -107,7 +112,7 @@ void zombie_move(App *app) {
 		z->close_range = close_range;
 
 		int ninja_facing = (app->ninja.dir == DIR_RIGHT ? 1 : -1) * (z->pos.x - app->ninja.pos.x);
-		if(ninja_facing > -ideal_dist * 0.3 && ninja_facing < ideal_dist * 1.3) {
+		if(ninja_facing > -ideal_dist * 0.3 && ninja_facing < ideal_dist * 1.25) {
 			app->ninja.close_range = i;
 		}
 
@@ -117,19 +122,21 @@ void zombie_move(App *app) {
 				if(close_range && (rand() % FPS) != 0) {
 					z->action = ACTION_IDLE;
 				} else {
-					z->action = app->ninja.action == ACTION_JUMP
+					z->action = 
+						app->ninja.action == ACTION_JUMP
+						&& app->ninja.frame < 3
 						? ACTION_JUMP : ACTION_ATTACK1;
 				}
 				z->frame = 0;
 			} else {
 				z->pos.x += dir == DIR_LEFT ? -1 : +1;
-				z->pos.y = map_y(app, z->pos.x);
 			}
 
 		} else if((((int)ceil(z->frame)) % z->sprite->frame_count) == 0 ) {
 			z->action = rand() % 2 ? ACTION_MOVE : ACTION_IDLE;
 		}
 
+		z->pos.y = map_y(app, z->pos.x);
 	}
 
 

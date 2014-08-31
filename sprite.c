@@ -78,7 +78,7 @@ void sprite_gen_target(Sprite *sprite, float zoom_factor)
     SDL_FreeSurface(element);
 }
 
-void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, int frames, const void *mem, int len, float zoom_factor)
+void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, int frames, const void *mem, int len, float zoom_factor, float fps)
 {
     memset(sprite,0,sizeof(Sprite));
     sprite->origin.x = ox;
@@ -90,5 +90,6 @@ void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, in
     sprite->source = IMG_Load_RW(SDL_RWFromConstMem( mem, len), 0);
     sprite->target = NULL;
 	sprite->zoom_factor = zoom_factor;
+	sprite->frame_step = fps / (float)FPS;
 	sprite_gen_target(sprite, zoom_factor);
 }

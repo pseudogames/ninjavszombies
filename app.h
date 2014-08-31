@@ -38,6 +38,7 @@ typedef struct {
     Point target_frame_size;
     SDL_Surface *target;
 	float zoom_factor;
+	float frame_step;
 } Sprite;
 
 typedef struct {
@@ -99,7 +100,7 @@ typedef struct {
 void sprite_source_rect(Sprite *sprite, Action action, int frame, SDL_Rect *rect);
 void sprite_target_rect(Sprite *sprite, Action action, int frame, Direction dir, SDL_Rect *rect);
 void sprite_gen_rotation(Sprite *sprite, float zoom_factor);
-void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, int frames, const void *mem, int len, float zoom_factor);
+void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, int frames, const void *mem, int len, float zoom_factor, float fps);
 
 void body_move(App *app, Body *body);
 void body_render(App *app, Body *body);

@@ -57,7 +57,7 @@ void blood_move(App *app) {
 		int first = drops[i].frame == 0;
 		if(!offscreen) {
 			drops[i].frame++;
-			if(drops[i].speed > 0) {
+			if(drops[i].speed > 0.5) {
 				drops[i].distance += drops[i].speed;
 				drops[i].speed -= 0.01 / (pow(drops[i].radius, 4) * (pow(10, -5)));
 			} else {
