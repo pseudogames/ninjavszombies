@@ -30,6 +30,8 @@ void missile_spawn(App *app) {
 	app->missile[i].speed.x =
 		(app->ninja.dir == DIR_LEFT ? -1 : +1) * app->screen->w/30;
 
+	// TODO shoot parallel to the ground (for ramps)
+
 	app->missile[i].speed.y = -app->screen->h/60 + (rand() % (app->screen->h/90));
 	app->missile[i].sprite = &app->sprite_missile1;
 }
@@ -42,6 +44,11 @@ void missile_move(App *app) {
 		app->missile[i].pos.x += app->missile[i].speed.x;
 		app->missile[i].pos.y += app->missile[i].speed.y;
 	}
+
+	// TODO hit enemies
+	// TODO hit ground
+	// TODO time to live
+	// TODO proper sprite art
 }
 
 void missile_render(App *app) {

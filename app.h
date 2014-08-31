@@ -47,6 +47,7 @@ typedef struct {
 	Direction dir;
 	float health;
 	Point speed;
+	int close_range;
 } Body;
 
 #define FPS 30

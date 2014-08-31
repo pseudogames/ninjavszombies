@@ -46,6 +46,8 @@ void zombie_spawn(App *app) {
 void zombie_move(App *app) {
 	int i;
 
+	app->ninja.close_range = -1;
+
 	for(i=0; i<MAX_ZOMBIES; i++) {
 		Body *z = &app->zombie[i];
 		if(!z->active) continue;
@@ -75,16 +77,18 @@ void zombie_move(App *app) {
 
 		if(app->zombie[i].action == ACTION_ATTACK1
 		&&((int)app->zombie[i].frame == 2 || (int)app->zombie[i].frame == 4)) {
-			damage = max_damage * 1.0;
+			damage = max_damage * 4;
 		}
 		if(app->zombie[i].action == ACTION_MOVE && (int)app->zombie[i].frame == 5) {
-			damage = max_damage * 0.2;
+			damage = max_damage * 2;
 		}
 		if(app->zombie[i].action == ACTION_JUMP && (int)app->zombie[i].frame >0) {
-			damage = max_damage * 0.1;
+			damage = max_damage * 1;
 		}
 
-		app->ninja.health -= damage;
+		if(damage > 0) {
+			app->ninja.health -= damage;
+		}
 				
 		// move to ninja
 		Direction dir = app->ninja.pos.x < app->zombie[i].pos.x
@@ -92,7 +96,13 @@ void zombie_move(App *app) {
 		app->zombie[i].dir = dir;
 
 		int close_range =
-			ABS(app->ninja.pos.x - app->zombie[i].pos.x) < ideal_dist;
+			ABS(app->ninja.pos.x - app->zombie[i].pos.x) < ideal_dist * 0.8;
+		app->zombie[i].close_range = close_range;
+
+		int ninja_facing = (app->ninja.dir == DIR_RIGHT ? 1 : -1) * (app->zombie[i].pos.x - app->ninja.pos.x);
+		if(ninja_facing > -ideal_dist * 0.3 && ninja_facing < ideal_dist * 1.3) {
+			app->ninja.close_range = i;
+		}
 
 		if(app->zombie[i].action == ACTION_MOVE) {
 			// attack if too close

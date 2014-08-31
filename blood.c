@@ -27,7 +27,8 @@ void blood_move(App *app) {
 		if(drops[i].radius > 16) {
 			filledCircleRGBA(app->blood, 
 							 drops[i].pos.x - app->heightmap_x, 
-							 drops[i].pos.y + (int)drops[i].distance, 
+							 drops[i].pos.y - app->map_y 
+							+ (int)drops[i].distance, 
 							 (moving_drop ? (drops[i].radius - (pow(drops[i].radius, 0.5) * 3.7)) : (drops[i].radius - (pow(drops[i].radius, 0.5) * 3.7) + 1)), 
 							 0xfe, 
 							 0, 
@@ -37,20 +38,19 @@ void blood_move(App *app) {
 	}
 }
 
+
+// TODO splat blood on a specific position
 void blood_spawn(App *app, Point pos) {
 	int i;
 	for(i = 0; i < BLOOD_DROPS; i++) {
-		int hx = (rand() % 50) * ((rand() % 2) ? 1 : (-1));
-		int hy = (rand() % 50) * ((rand() % 2) ? 1 : (-1));
-		int radius = 5 + (rand() % 20);
 		Drop drop;
-		drop.pos.x = app->screen->w/2 + hx;
-		drop.pos.y = app->screen->h/3 + hy;
-		drop.radius = radius;
+		drop.pos.x = pos.x + (rand() % 100) - 50;
+		drop.pos.y = pos.y + (rand() % 100) - 50;
+		drop.radius = 5 + (rand() % 20);
 		drop.speed = 1.0;
 		drop.distance = 0.0;
-		//aacircleRGBA(app->blood, app->screen->w/2 + hx, app->screen->h/3 + hy, radius, 0xfe, 0, 0, 0xfe);
-		filledCircleRGBA(app->blood, drop.pos.x, drop.pos.y, drop.radius, 0xfe, 0, 0, 0xfe);
+		//aacircleRGBA(app->blood, drop.pos.x, drop.pos.y, drop.radius, 0xfe, 0, 0, 0xff);
+		filledCircleRGBA(app->blood, drop.pos.x, drop.pos.y, drop.radius, 0xfe, 0, 0, 0xff);
 		drops[number_of_drops] = drop;
 		number_of_drops++;
 	}
