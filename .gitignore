@@ -4,3 +4,4 @@ data/*.h
 /nvz*
 /NinjaVsZombie.app
 .DS_Store
+*.zip

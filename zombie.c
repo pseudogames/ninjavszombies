@@ -23,7 +23,6 @@ void zombie_spawn(App *app) {
 		//printf("search free zombie slot\n");
 		app->zombie_spawn_time = t;
 		app->zombie_spawn_delay *= 0.95;
-		printf("l %f\n", app->zombie_spawn_delay);
 
 		for(i=0; i<MAX_ZOMBIES; i++) {
 			if(app->zombie[i].active) continue;
@@ -35,7 +34,6 @@ void zombie_spawn(App *app) {
 				? (- app->zombie[i].sprite->target_frame_size.x) 
 				: (app->screen->w + app->zombie[i].sprite->target_frame_size.x)
 			);
-			printf("s %d\n", app->zombie[i].pos.x);
 			app->zombie[i].pos.y = map_y(app, app->zombie[i].pos.x);
 			app->zombie[i].health = 10;
 			app->zombie[i].active = 1;

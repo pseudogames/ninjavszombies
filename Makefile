@@ -12,12 +12,16 @@ else
   LFDLAGS=-static 
   CFLAGS=`sdl-config --cflags` -I. -ggdb #-pg
   OUTPUT=nvz
-ifdef MAC
-  CFLAGS += -IHardHeaded.app/Contents/Frameworks/SDL.framework/Headers -force_cpusubtype_ALL -mmacosx-version-min=10.6
-  LIBS=-IHardHeaded.app/Contents/Frameworks/SDL.framework/Headers /opt/local/lib/libSDL_ttf.a /opt/local/lib/libfreetype.a /opt/local/lib/libSDL_gfx.a /opt/local/lib/libSDL_image.a /opt/local/lib/libjpeg.a /opt/local/lib/libpng.a /opt/local/lib/libSDL_mixer.a /opt/local/lib/libvorbisfile.a /opt/local/lib/libvorbis.a /opt/local/lib/libogg.a /opt/local/lib/libmikmod.a /opt/local/lib/libflac.a /opt/local/lib/libsmpeg.a /opt/local/lib/libbz2.a /opt/local/lib/libz.a -lstdc++ SDLmain.m -FHardHeaded.app/Contents/Frameworks -framework SDL -framework Cocoa -Wl,-framework,ApplicationServices -Wl,-framework,Carbon -Wl,-framework,AudioToolbox -Wl,-framework,AudioUnit -Wl,-framework,IOKit
-else # linux
-  LIBS=-L/opt/local/lib -lSDL_image -lSDL_ttf -lSDL_mixer -lSDL_gfx -lSDL_ttf `sdl-config --libs` -lm # -pg
+  ifdef MAC
+    CFLAGS += -IHardHeaded.app/Contents/Frameworks/SDL.framework/Headers -force_cpusubtype_ALL -mmacosx-version-min=10.6
+    LIBS=-IHardHeaded.app/Contents/Frameworks/SDL.framework/Headers /opt/local/lib/libSDL_ttf.a /opt/local/lib/libfreetype.a /opt/local/lib/libSDL_gfx.a /opt/local/lib/libSDL_image.a /opt/local/lib/libjpeg.a /opt/local/lib/libpng.a /opt/local/lib/libSDL_mixer.a /opt/local/lib/libvorbisfile.a /opt/local/lib/libvorbis.a /opt/local/lib/libogg.a /opt/local/lib/libmikmod.a /opt/local/lib/libflac.a /opt/local/lib/libsmpeg.a /opt/local/lib/libbz2.a /opt/local/lib/libz.a -lstdc++ SDLmain.m -FHardHeaded.app/Contents/Frameworks -framework SDL -framework Cocoa -Wl,-framework,ApplicationServices -Wl,-framework,Carbon -Wl,-framework,AudioToolbox -Wl,-framework,AudioUnit -Wl,-framework,IOKit
+  else # linux
+    LIBS=-L/opt/local/lib -lSDL_image -lSDL_ttf -lSDL_mixer -lSDL_gfx -lSDL_ttf `sdl-config --libs` -lm # -pg
+  endif
 endif
+
+ifdef RELEASE
+  CFLAGS+=-DRELEASE
 endif
 
 OBJS=main.o sprite.o body.o ninja.o zombie.o missile.o map.o blood.o

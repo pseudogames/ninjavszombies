@@ -1,3 +1,4 @@
+#include <math.h>
 #include "app.h"
 #include "data/missile.h"
 
@@ -67,7 +68,7 @@ void missile_move(App *app) {
 
 			int xdist = (app->missile[i].pos.x - app->zombie[j].pos.x);
 			int ydist = (app->missile[i].pos.y - app->zombie[j].pos.y);
-			int dist = sqrt(xdist*xdist + ydist*ydist);
+			int dist = (int)sqrt(xdist*xdist + ydist*ydist);
 			if(dist < app->sprite_zombie.target_frame_size.x/4) {
 				app->missile[i].active = 0;
 				blood_spawn(app, app->missile[i].pos);
