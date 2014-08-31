@@ -5,6 +5,7 @@ void map_init(App *app) {
 	int i;
 	for(i=0; i<MAP_SIZE; i++) {
 		app->heightmap[i] = 0;
+		app->heightmap_ceil[i] = 0;
 	}
 
 }
@@ -28,6 +29,7 @@ void map_move(App *app) {
 		
 			for(i=0; i<MAP_SIZE-1; i++) {
 				app->heightmap[i] = app->heightmap[i+1];
+				app->heightmap_ceil[i] = app->heightmap_ceil[i+1];
 			}
 
 			{ // move blood
@@ -61,28 +63,31 @@ void map_move(App *app) {
 
 			int ramp = 0;
 			for(i=0; i<MAP_SIZE-1; i++) {
-				if(app->heightmap[i] != app->heightmap[i+1]) {
+				if(ABS(app->heightmap[i] - app->heightmap[i+1]) >= TILE_SIZE) {
 					ramp = 1;
 					break;
 				}
 			}
-
 			int p0 = app->heightmap[MAP_SIZE-3];
 			int p1 = app->heightmap[MAP_SIZE-2];
-			int p2 = p1;
+			int p2 = p1 + (rand() % TILE_SIZE) - TILE_SIZE/2;
+			int p2c = app->heightmap_ceil[MAP_SIZE-2]
+				+ (rand() % TILE_SIZE) - TILE_SIZE/2;
 			if(ramp) {
-				if(p0 != p1) {
-					if((rand() % (MAP_SIZE/8)) != 0) {
-						p2 = p1 + (p1 - p0);
+				if(ABS(p0 - p1) >= TILE_SIZE) {
+					if((rand() % (MAP_SIZE/4)) != 0) {
+						p2 = p1 + ((p1 - p0) / TILE_SIZE) * TILE_SIZE;
+						p2c = (p2c * 0.8 + p2 * 0.2) / TILE_SIZE * TILE_SIZE;
 					}
 				}
 			} else {
 				if((rand() % (MAP_SIZE/8)) == 0) {
-					printf("step\n");
 					p2 = p1 + TILE_SIZE *  ((rand() % 2) ? +1 : -1);
+					p2c = (p2c * 0.8 + p2 * 0.2) / TILE_SIZE * TILE_SIZE;
 				}
 			}
 			app->heightmap[MAP_SIZE-1] = p2;
+			app->heightmap_ceil[MAP_SIZE-1] = p2c;
 		}
 	}
 }
@@ -94,10 +99,14 @@ inline int map_y(App *app, int x) {
 }
 
 inline int map_y0(App *app, int x) {
-	return map_y(app, x) - app->sprite_ninja.target_frame_size.y;
+	return app->heightmap_ceil[
+		CLAMP((x - app->map_x)/TILE_SIZE, 0, MAP_SIZE-1)
+	] - app->sprite_ninja.target_frame_size.y;
 }
 inline int map_y1(App *app, int x) {
-	return map_y(app, x) + app->sprite_ninja.target_frame_size.y/2;
+	return app->heightmap[
+		CLAMP((x - app->map_x)/TILE_SIZE, 0, MAP_SIZE-1)
+	] + app->sprite_ninja.target_frame_size.y * 0.475;
 }
 
 void map_render(App *app) {
@@ -108,9 +117,10 @@ void map_render(App *app) {
 		int x = app->map_x + sx;
 		int y0 = CLAMP(map_y0(app, x) - app->map_y, 0, app->screen->h-1);
 		int y1 = CLAMP(map_y1(app, x) - app->map_y, 0, app->screen->h-1);
-		SDL_Rect rect_top    = { sx, 0, TILE_SIZE, y0 };
-		SDL_Rect rect_bottom = { sx, y1 , TILE_SIZE,  sh - y1};
+		SDL_Rect rect_top    = { sx, 0,  TILE_SIZE, y0 };
+		SDL_Rect rect_bottom = { sx, y1, TILE_SIZE, sh - y1};
 		SDL_FillRect(app->screen, &rect_top    , color);
 		SDL_FillRect(app->screen, &rect_bottom , color);
 	}
 }
+

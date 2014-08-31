@@ -72,6 +72,7 @@ typedef struct {
 	int map_y;
 	int heightmap_x;
 	int heightmap[MAP_SIZE];
+	int heightmap_ceil[MAP_SIZE];
 	int missile_index;
 	SDL_Surface *blood;
 	SDL_Surface *blood_off;
@@ -80,6 +81,7 @@ typedef struct {
 #define MAX(a,b) ((a)>(b)?(a):(b))
 #define MIN(a,b) ((a)<(b)?(a):(b))
 #define CLAMP(x,a,b) ((x)<(a)?(a):(x)>(b)?(b):(x))
+#define ABS(x) ((x)<0?-(x):(x))
 
 #define RGBA_FORMAT 32,0x00ff0000,0x0000ff00,0x000000ff,0xff000000
 
