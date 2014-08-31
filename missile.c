@@ -28,11 +28,26 @@ void missile_spawn(App *app) {
 	app->missile[i].pos.y = app->ninja.pos.y;
 
 	app->missile[i].speed.x =
-		(app->ninja.dir == DIR_LEFT ? -1 : +1) * app->screen->w/30;
+		(app->ninja.dir == DIR_LEFT ? -1 : +1) 
+		* app->sprite_zombie.target_frame_size.x/7;
 
-	// TODO shoot parallel to the ground (for ramps)
+	// shoot parallel to the ground (for ramps)
+	int forward_x = app->missile[i].pos.x;
+	int forward_y = 0;
+	int j, c=0, n = 4;
+	int y = app->missile[i].pos.y;
+	for(j=0; j<n; j++) {
+		forward_x += app->missile[i].speed.x * TILE_SIZE;
+		forward_y += map_y(app, forward_x);
+		c++;
+		n = forward_y > y ? 8 : 4;
+	}
+	forward_y /= c;
+	int delta_y = forward_y - y;
+	delta_y /= 8;
 
-	app->missile[i].speed.y = -app->screen->h/60 + (rand() % (app->screen->h/90));
+
+	app->missile[i].speed.y = -app->screen->h/60 + (rand() % (app->screen->h/90)) + delta_y;
 	app->missile[i].sprite = &app->sprite_missile1;
 }
 
