@@ -45,9 +45,11 @@ typedef struct {
 	Action action;
 	float frame;
 	Direction dir;
-	int health;
+	float health;
 	Point speed;
 } Body;
+
+#define FPS 30
 
 #define WIDTH 1024
 #define HEIGHT 768

@@ -6,7 +6,6 @@
 #include "app.h"
 #include "data/icon.h"
 
-#define FPS 30
 
 void handleDelay(Uint32 start) {
 	Uint32 end = SDL_GetTicks();
