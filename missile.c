@@ -63,7 +63,7 @@ void missile_move(App *app) {
 		for(j=0; j<MAX_ZOMBIES; j++) {
 			Body *z = &app->zombie[j];
 			if(!z->active) continue;
-			if(!z->action == ACTION_DEATH) continue;
+			if(z->action == ACTION_DEATH) continue;
 
 			int xdist = (app->missile[i].pos.x - app->zombie[j].pos.x);
 			int ydist = (app->missile[i].pos.y - app->zombie[j].pos.y);
