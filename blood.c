@@ -7,6 +7,8 @@
 typedef struct {
 	Point pos;
 	int radius;
+	float speed;
+	float distance;
 } Drop;
 
 Drop drops[MAX_ZOMBIES * BLOOD_DROPS];
@@ -15,9 +17,23 @@ int number_of_drops = 0;
 void blood_move(App *app) {
 	int i;
 	for(i = 0; i < (number_of_drops % (MAX_ZOMBIES * BLOOD_DROPS)); i++) {
-		drops[i].pos.y++;
-
-		filledCircleRGBA(app->blood, drops[i].pos.x - app->heightmap_x, drops[i].pos.y, drops[i].radius - 7, 0xfe, 0, 0, 0xfe);
+		int moving_drop = 1;
+		if(drops[i].speed > 0) {
+			drops[i].distance += drops[i].speed;
+			drops[i].speed -= 0.01 / (pow(drops[i].radius, 4) * (pow(10, -5)));
+		} else {
+			moving_drop = 0;
+		}
+		if(drops[i].radius > 16) {
+			filledCircleRGBA(app->blood, 
+							 drops[i].pos.x - app->heightmap_x, 
+							 drops[i].pos.y + (int)drops[i].distance, 
+							 (moving_drop ? (drops[i].radius - (pow(drops[i].radius, 0.5) * 3.7)) : (drops[i].radius - (pow(drops[i].radius, 0.5) * 3.7) + 1)), 
+							 0xfe, 
+							 0, 
+							 0, 
+							 0xfe);
+		}
 	}
 }
 
@@ -31,6 +47,8 @@ void blood_spawn(App *app, Point pos) {
 		drop.pos.x = app->screen->w/2 + hx;
 		drop.pos.y = app->screen->h/3 + hy;
 		drop.radius = radius;
+		drop.speed = 1.0;
+		drop.distance = 0.0;
 		//aacircleRGBA(app->blood, app->screen->w/2 + hx, app->screen->h/3 + hy, radius, 0xfe, 0, 0, 0xfe);
 		filledCircleRGBA(app->blood, drop.pos.x, drop.pos.y, drop.radius, 0xfe, 0, 0, 0xfe);
 		drops[number_of_drops] = drop;
