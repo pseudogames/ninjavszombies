@@ -8,7 +8,8 @@ void zombie_init(App *app) {
 		0, 0, // origin
 		84, 84, // frame size
 		ACTION_COUNT, 6, // action, frame counts
-		zombie_png, zombie_png_len // source
+		zombie_png, zombie_png_len, // source
+		TILE_SIZE
 	);
 
 	app->zombie_spawn_time = SDL_GetTicks();

@@ -21,13 +21,13 @@ void sprite_target_rect(Sprite *sprite, Action action, int frame, Direction dir,
     rect->h = sprite->target_frame_size.y;
 }
 
-void sprite_gen_target(Sprite *sprite)
+void sprite_gen_target(Sprite *sprite, float zoom_factor)
 {
     zoomSurfaceSize(
             sprite->frame_size.x,
             sprite->frame_size.y,
-            TILE_SIZE,  // no zoom
-            TILE_SIZE,  // no zoom
+            zoom_factor,
+            zoom_factor,
             &sprite->target_frame_size.x,
             &sprite->target_frame_size.y
             );
@@ -64,7 +64,7 @@ void sprite_gen_target(Sprite *sprite)
                 sprite_target_rect(sprite, action, frame, dir, &dst);
                 SDL_FillRect(element, NULL, 0x00000000);
                 SDL_BlitSurface( sprite->source, &src, element, NULL );
-                SDL_Surface *zoom = zoomSurface(element, (dir ? 1 : -1) * TILE_SIZE, TILE_SIZE, SMOOTHING_OFF);
+                SDL_Surface *zoom = zoomSurface(element, (dir ? 1 : -1) * zoom_factor, zoom_factor, SMOOTHING_OFF);
                 SDL_SetAlpha(zoom,0,0);
                 SDL_SetColorKey(zoom,0,0);
                 dst.x += dst.w/2 - zoom->w/2;
@@ -78,7 +78,7 @@ void sprite_gen_target(Sprite *sprite)
     SDL_FreeSurface(element);
 }
 
-void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, int frames, const void *mem, int len)
+void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, int frames, const void *mem, int len, float zoom_factor)
 {
     memset(sprite,0,sizeof(Sprite));
     sprite->origin.x = ox;
@@ -89,5 +89,6 @@ void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, in
     sprite->action_count = actions;
     sprite->source = IMG_Load_RW(SDL_RWFromConstMem( mem, len), 0);
     sprite->target = NULL;
-	sprite_gen_target(sprite);
+	sprite->zoom_factor = zoom_factor;
+	sprite_gen_target(sprite, zoom_factor);
 }

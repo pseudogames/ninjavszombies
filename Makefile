@@ -26,8 +26,7 @@ INCS=\
 data/icon.h \
 data/ninja.h \
 data/zombie.h \
-data/missile1.h \
-data/missile2.h \
+data/missile.h \
 
 .PHONY: all clean depend mac win
 

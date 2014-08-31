@@ -64,7 +64,6 @@ void blood_move(App *app) {
 }
 
 
-// TODO splat blood on a specific position
 void blood_spawn(App *app, Point pos) {
 	int i;
 	for(i = 0; i < BLOOD_DROPS; i++) {

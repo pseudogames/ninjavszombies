@@ -1,22 +1,16 @@
 #include "app.h"
-#include "data/missile1.h"
-#include "data/missile2.h"
+#include "data/missile.h"
 
 void missile_init(App *app) {
 
-	sprite_init(&app->sprite_missile1,
+	sprite_init(&app->sprite_missile,
 		0, 0, // origin
 		16, 16, // frame size
 		1, 4, // action, frame counts
-		missile1_png, missile1_png_len // source
+		missile_png, missile_png_len, // source
+		1
 	);
 
-	sprite_init(&app->sprite_missile2,
-		0, 0, // origin
-		16, 16, // frame size
-		1, 4, // action, frame counts
-		missile2_png, missile2_png_len // source
-	);
 
 }
 
@@ -49,7 +43,7 @@ void missile_spawn(App *app) {
 	printf("shot %d %d %d %d\n", n, delta_y, app->missile[i].pos.x, forward_x);
 
 	app->missile[i].speed.y = -app->screen->h/60 + (rand() % (app->screen->h/90)) + delta_y;
-	app->missile[i].sprite = &app->sprite_missile1;
+	app->missile[i].sprite = &app->sprite_missile;
 }
 
 void missile_move(App *app) {
@@ -84,7 +78,6 @@ void missile_move(App *app) {
 		}
 	}
 
-	// TODO proper sprite art
 }
 
 void missile_render(App *app) {

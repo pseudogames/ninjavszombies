@@ -7,7 +7,8 @@ void ninja_init(App *app) {
 		0, 0, // origin
 		80, 80, // frame size
 		ACTION_COUNT, 6, // action, frame counts
-		ninja_png, ninja_png_len // source
+		ninja_png, ninja_png_len, // source
+		TILE_SIZE
 	);
 
 	app->ninja.sprite = &app->sprite_ninja;

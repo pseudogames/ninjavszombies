@@ -36,6 +36,7 @@ typedef struct {
     SDL_Surface *source;
     Point target_frame_size;
     SDL_Surface *target;
+	float zoom_factor;
 } Sprite;
 
 typedef struct {
@@ -63,8 +64,7 @@ typedef struct {
 	AppState state;
 	Sprite sprite_ninja;
 	Sprite sprite_zombie;
-	Sprite sprite_missile1;
-	Sprite sprite_missile2;
+	Sprite sprite_missile;
 	Body ninja;
 	Body zombie[MAX_ZOMBIES];
 	Body missile[MAX_MISSILES];
@@ -93,8 +93,8 @@ typedef struct {
 
 void sprite_source_rect(Sprite *sprite, Action action, int frame, SDL_Rect *rect);
 void sprite_target_rect(Sprite *sprite, Action action, int frame, Direction dir, SDL_Rect *rect);
-void sprite_gen_rotation(Sprite *sprite);
-void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, int frames, const void *mem, int len);
+void sprite_gen_rotation(Sprite *sprite, float zoom_factor);
+void sprite_init(Sprite *sprite, int ox, int oy, int fx, int fy, int actions, int frames, const void *mem, int len, float zoom_factor);
 
 void body_move(App *app, Body *body);
 void body_render(App *app, Body *body);
