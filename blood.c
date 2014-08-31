@@ -39,14 +39,6 @@ void blood_spawn(App *app, Point pos) {
 }
 
 void blood_init(App *app) {
-	int i;
-	for(i=0; i<MAP_SIZE; i++) {
-		app->heightmap[i] = 0;
-	}
-
-	app->map_step_x = 0;
-	app->map_step_delay = app->screen->w;
-
     app->blood = SDL_CreateRGBSurface(SDL_HWSURFACE, 
             app->screen->w,
             app->screen->h,

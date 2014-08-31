@@ -7,19 +7,17 @@ void map_init(App *app) {
 		app->heightmap[i] = 0;
 	}
 
-	app->map_step_x = 0;
-	app->map_step_delay = app->screen->w;
 }
 
 void map_move(App *app) {
 	int i;
 	
 	if(app->ninja.pos.y - app->map_y > app->screen->h * 0.7  ) {
-		app->map_y += app->screen->h/50;
+		app->map_y ++;
 	}
 
 	if(app->ninja.pos.y - app->map_y < app->screen->h * 0.4  ) {
-		app->map_y -= app->screen->h/50;
+		app->map_y --;
 	}
 
 	while(app->ninja.pos.x - app->map_x > app->screen->w * 0.6) {
@@ -61,21 +59,30 @@ void map_move(App *app) {
 				SDL_SetAlpha(app->blood, SDL_SRCALPHA, 0xff);
 			}
 
+			int ramp = 0;
+			for(i=0; i<MAP_SIZE-1; i++) {
+				if(app->heightmap[i] != app->heightmap[i+1]) {
+					ramp = 1;
+					break;
+				}
+			}
+
 			int p0 = app->heightmap[MAP_SIZE-3];
 			int p1 = app->heightmap[MAP_SIZE-2];
 			int p2 = p1;
-			if(p0 != p1) {
-				if((rand() % 10) != 0) {
-					p2 = p1 + (p1 - p0);
+			if(ramp) {
+				if(p0 != p1) {
+					if((rand() % (MAP_SIZE/8)) != 0) {
+						p2 = p1 + (p1 - p0);
+					}
 				}
 			} else {
-				if(app->map_x - app->map_step_x > app->map_step_delay
-				&& (rand() % (MAP_SIZE/4)) == 0) {
-					p2 = p1 + TILE_SIZE / 2 *  ((rand() % 2) ? +1 : -1);
-					app->map_step_x = app->map_x;
+				if((rand() % (MAP_SIZE/8)) == 0) {
+					printf("step\n");
+					p2 = p1 + TILE_SIZE *  ((rand() % 2) ? +1 : -1);
 				}
 			}
-			app->heightmap[i] = p2;
+			app->heightmap[MAP_SIZE-1] = p2;
 		}
 	}
 }
