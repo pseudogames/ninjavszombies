@@ -87,8 +87,10 @@ void blood_spawn(App *app, Point pos) {
 			if(!drops[j].active) {
 				drops[j].active = 1;
 				drops[j].frame = 0;
-				drops[j].pos.x = pos.x + (rand() % 100) - 50;
-				drops[j].pos.y = pos.y + (rand() % 100) - 50;
+				float angle = (rand() % 1000)/1000.0 * 2 * M_PI;
+				float dist  = (rand() % 50);
+				drops[j].pos.x = pos.x + cos(angle) * dist;
+				drops[j].pos.y = pos.y + sin(angle) * dist;
 				drops[j].radius = 5 + (rand() % 20);
 				drops[j].speed = 1.0;
 				drops[j].distance = 0.0;
